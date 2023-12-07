@@ -4,17 +4,17 @@ const FIGURES: Record<string, string> = { "T": "A", "J": "B", "Q": "C", "K": "D"
 const FIGURES_JOKER: Record<string, string> = { "T": "A", "J": ".", "Q": "C", "K": "D", "A": "E" };
 
 function classify(hand: string[]): number {
-    const counts: number[] = hand.map(card => hand.filter(c => c === card).length);
+  const counts: number[] = hand.map(card => hand.filter(c => c === card).length);
 
-    if (counts.includes(5)) return 6;
-    if (counts.includes(4)) return 5;
-    if (counts.includes(3)) {
-        if (counts.includes(2)) return 4;
-        return 3;
-    }
-    if (counts.filter(count => count === 2).length === 4) return 2;
-    if (counts.includes(2)) return 1;
-    return 0;
+  if (counts.includes(5)) return 6;
+  if (counts.includes(4)) return 5;
+  if (counts.includes(3)) {
+    if (counts.includes(2)) return 4;
+    return 3;
+  }
+  if (counts.filter(count => count === 2).length === 4) return 2;
+  if (counts.includes(2)) return 1;
+  return 0;
 }
 
 function classifyWithJoker(hand: string): number {
@@ -60,26 +60,26 @@ function getTotalBid(input: string[], map: Record<string, string>): number {
   const plays: [string[], number][] = [];
 
   for (const line of input) {
-      const [hand, bid] = line.split(' ');
-      plays.push([hand.split(''), parseInt(bid, 10)]);
+    const [hand, bid] = line.split(' ');
+    plays.push([hand.split(''), parseInt(bid, 10)]);
   }
 
   plays.sort((playA, playB) => {
-      const strengthA = strength(playA[0], map)[0];
-      const strengthB = strength(playB[0], map)[0];
-      
-      if (strengthA !== strengthB) {
-        return strengthA - strengthB;
-      } else {
-        const cardsA = strength(playA[0], map)[1];
-        const cardsB = strength(playB[0], map)[1];
-        for (let i = 0; i < cardsA.length; i++) {
-          if (cardsA[i] !== cardsB[i]) {
-            return cardsA[i] < cardsB[i] ? -1 : 1;
-          }
+    const strengthA = strength(playA[0], map)[0];
+    const strengthB = strength(playB[0], map)[0];
+
+    if (strengthA !== strengthB) {
+      return strengthA - strengthB;
+    } else {
+      const cardsA = strength(playA[0], map)[1];
+      const cardsB = strength(playB[0], map)[1];
+      for (let i = 0; i < cardsA.length; i++) {
+        if (cardsA[i] !== cardsB[i]) {
+          return cardsA[i] < cardsB[i] ? -1 : 1;
         }
-        return 0;
       }
+      return 0;
+    }
   });
 
   return plays.reduce((acc, [_, bid], rank) => acc + bid * (rank + 1), 0);
